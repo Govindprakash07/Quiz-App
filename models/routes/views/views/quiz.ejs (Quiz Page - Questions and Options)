@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%= quiz.title %></title>
+    <link rel="stylesheet" href="/public/style.css">
+</head>
+<body>
+    <header>
+        <h1><%= quiz.title %> Quiz</h1>
+    </header>
+
+    <form action="/quiz/<%= quiz._id %>" method="POST">
+        <% quiz.questions.forEach((question, index) => { %>
+            <fieldset>
+                <legend><%= question.question %></legend>
+                <% question.options.forEach((option, i) => { %>
+                    <label>
+                        <input type="radio" name="question-<%= index %>" value="<%= option %>" required>
+                        <%= option %>
+                    </label><br>
+                <% }); %>
+            </fieldset>
+        <% }); %>
+
+        <button type="submit">Submit Quiz</button>
+    </form>
+</body>
+</html>
