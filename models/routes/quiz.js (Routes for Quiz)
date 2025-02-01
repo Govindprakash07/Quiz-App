@@ -1,0 +1,32 @@
+const express = require("express");
+const Quiz = require("../models/Quiz");
+
+const router = express.Router();
+
+// Show Quiz List
+router.get("/", async (req, res) => {
+    const quizzes = await Quiz.find();
+    res.render("index", { quizzes });
+});
+
+// Show Specific Quiz
+router.get("/quiz/:id", async (req, res) => {
+    const quiz = await Quiz.findById(req.params.id);
+    res.render("quiz", { quiz });
+});
+
+// Handle Quiz Submission
+router.post("/quiz/:id", async (req, res) => {
+    const quiz = await Quiz.findById(req.params.id);
+    let score = 0;
+
+    quiz.questions.forEach((question, index) => {
+        if (req.body[`question-${index}`] === question.correctAnswer) {
+            score++;
+        }
+    });
+
+    res.render("result", { score, total: quiz.questions.length });
+});
+
+module.exports = router;
